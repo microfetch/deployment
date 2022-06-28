@@ -1,0 +1,48 @@
+- name: Remove users
+  user:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ users_denied }}"
+  loop_control:
+    label: "Remove user {{ item }}"
+
+- name: Add users
+  user:
+    name: "{{ item.name }}"
+    create_home: yes
+    shell: /bin/bash
+  with_items: "{{ users_allowed }}"
+  loop_control:
+    label: "Add user {{ item.name }}"
+
+- name: Add keys
+  authorized_key:
+    user: "{{ item.name }}"
+    key : "{{ item.authorized_keys }}"
+  with_items: "{{ users_allowed }}"
+  loop_control:
+    label: "Add user {{ item.name }} authorized_keys"
+
+- name: Add to sudoers
+  copy:
+    content: "{{ item.name }} ALL=(ALL:ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/{{ item.name | split('.') | join('_') }}"
+    mode: 0440
+    validate: '/usr/sbin/visudo -cf %s'
+  with_items: "{{ users_allowed }}"
+  loop_control:
+    label: "Add user {{ item.name }} to sudoers"
+
+- name: Make docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add to Docker group.
+  user:
+    name: "{{ item.name }}"
+    append: yes
+    groups: docker
+  with_items: "{{ users_allowed }}"
+  loop_control:
+    label: "Add user {{ item.name }} to Docker group"

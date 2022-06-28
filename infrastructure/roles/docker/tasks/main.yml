@@ -1,0 +1,37 @@
+- name: Install dependencies
+  apt:
+    update_cache: yes
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - iptables-persistent
+    state: present
+
+- name: Add docker Apt signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Install docker
+  apt:
+    update_cache: yes
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+
+- name: Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes

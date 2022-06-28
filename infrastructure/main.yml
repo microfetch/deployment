@@ -1,0 +1,15 @@
+- name: Install docker
+  hosts: all
+  become: yes
+  roles:
+    - docker
+
+- name: Add users and packages.
+  hosts: all
+  become: yes
+  vars_files:
+    - vars/users.yml
+  roles:
+    - cgps.users
+
+#    - dns

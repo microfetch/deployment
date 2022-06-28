@@ -1,0 +1,15 @@
+---
+users_allowed:
+  - name: corin.yeats
+    authorized_keys: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICCsmfyBmV/P66W/UxkjJGiKmunfALcgN2bwqLXorXb9 dr.yeats@gmail.com
+  - name: khalil.abudahab
+    authorized_keys: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmMwSxG5iDEUlY97COZ0gERYdYC9B6bvTPAJx0/qGqaCVibeLNRtk2/IoaLgpLDMq5A8jZhTXO4LiLSckB7oLdJcB5+WHpXYk4QZ1bKir6vObusHioFy6rJpxCZNXGbtJvgspTSw2otfRZipqUEa9aZMfwfV5bSKSmyPMffpQWzao1oyDLpUmfAGliE7czmlinEv36y1xcQwR0LZ85vgKKFUZKCpHbJ/Ye5ukTgUQNj5lJ9v9YdqWK/HiLUUjYDlU8cpWi99vPC2fg5+dw1LuBIByhWwLEFfS/lo2swd8Fb1720seztJqCE2zuaS4W612wAx4ZGRftrFIihuGWMy/F kad@Creator.local
+  - name: matt.jaquiery
+    authorized_keys: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFE4joYFENyCiO+JMf3mo8Yqbda38Bgv/84sw0kckcof mj@MJPC
+
+users_denied:
+  - evil.bob
+  - matt.jacquiery

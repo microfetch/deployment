@@ -1,0 +1,22 @@
+- name: Bootstrap a brand new server.
+  hosts: all
+
+  vars_files:
+    - vars/users.yml
+
+  roles:
+    - cgps.users
+    - dns
+    - do_monitoring
+    - docker
+
+- name: Run security fixes.
+  hosts: all
+
+  roles:
+    - security
+  tasks:
+    - name: Upgrade all apt packages
+      apt: upgrade=dist force_apt_get=yes cache_valid_time=3600
+
+

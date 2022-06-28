@@ -1,0 +1,42 @@
+- name: Install packages
+  package:
+    cache_valid_time: 86400
+    name:
+    - fail2ban
+    - unattended-upgrades
+
+- name: Lock down SSH
+  lineinfile:
+    backup: yes
+    line: "{{ item.line }}"
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    validate: "/usr/sbin/sshd -t -f %s"
+  with_items:
+    - line: PermitRootLogin no
+      regexp: "^PermitRootLogin "
+    - line: PasswordAuthentication no
+      regexp: "^PasswordAuthentication "
+  notify:
+    - restart sshd
+
+- name: Configure update interval
+  copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.dest }}"
+    mode: 0400
+    owner: root
+    group: root
+  with_items:
+    - content: |
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::Download-Upgradeable-Packages "1";
+        APT::Periodic::AutocleanInterval "7";
+        APT::Periodic::Unattended-Upgrade "1";
+      dest: /etc/apt/apt.conf.d/10periodic
+    - content: |
+        Unattended-Upgrade::Allowed-Origins {
+                "Ubuntu {{ ansible_distribution_release }}-security";
+        //      "Ubuntu {{ ansible_distribution_release }}-updates";
+        };
+      dest: /etc/apt/apt.conf.d/50unattended-upgrades

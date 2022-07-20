@@ -52,4 +52,42 @@ Host microfetch-worker-1
 ```
 
 ## Deploying microfetch
-TBD.
+
+### Pipeline
+
+Deployment happens via git clone and docker compose. 
+First, deploy the pipeline by connecting to `microfetch-mgmt-1`:
+
+```shell
+git clone https://github.com/microfetch/microfetch-pipeline.git
+```
+
+You will be prompted for login details because the repository is private.
+Create a Personal Access Token if you need to on GitHub (User Account > Settings > Developer Settings).
+
+Once the repo is downloaded, `cd` into it and add the [environment files](https://github.com/microfetch/microfetch-pipeline/tree/dev/main#environment-files).
+
+Finally, ensure the shell files have the necessary permissions and then build and launch the containers:
+
+```shell
+chmod +x */init.sh
+docker compose up --build
+```
+
+### Assembler
+
+The assembler deployment process is similar. 
+Log into `microfetch-worker-1` and clone the repository, then set the shell file permissions:
+
+```shell
+git clone https://github.com/microfetch/microfetch-assembly.git
+cd microfetch-assembly
+chmod +x cron.sh
+```
+
+There is only one [environment file](https://github.com/microfetch/microfetch-assembly#envspaces) to set up. 
+Once that is done, ensure that the `API_URL` is set correctly in the `docker-compose.yml` file and launch the container:
+
+```shell
+docker compose up --build
+```
